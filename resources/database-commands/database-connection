@@ -1,0 +1,3 @@
+docker run  --name graph-world -d -p 55437:5432 -e POSTGRES_USER=graphs -e POSTGRES_PASSWORD=verysecurepassword -e POSTGRES_DB=graphs postgres:10-alpine
+
+psql -e -h localhost -p 55437 -U graphs -d graphs

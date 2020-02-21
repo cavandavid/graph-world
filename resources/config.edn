@@ -1,0 +1,12 @@
+{:web-server
+ {:port 11131}
+ :database
+ {:port-number       55437
+  :server-name 						"localhost"
+  :database-name     "graphs"
+  :username          "graphs"
+  :password          "verysecurepassword"
+  :minimum-idle      5
+  :maximum-pool-size 5
+  :max-lifetime      0
+  :adapter           "postgresql"}}
