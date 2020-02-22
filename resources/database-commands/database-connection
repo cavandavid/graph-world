@@ -1,3 +1,44 @@
+--- Run PSQL Docker image with init settings
 docker run  --name graph-world -d -p 55437:5432 -e POSTGRES_USER=graphs -e POSTGRES_PASSWORD=verysecurepassword -e POSTGRES_DB=graphs postgres:10-alpine
 
+--- Connect your psql client to psql database running in docker container via exposed port
 psql -e -h localhost -p 55437 -U graphs -d graphs
+
+-- DDL
+
+CREATE TABLE nodes(
+	id           SERIAL PRIMARY KEY,
+	name 	     TEXT UNIQUE NOT NULL UNIQUE,
+	description  TEXT
+);
+
+CREATE TABLE edges(
+	id          SERIAL PRIMARY KEY,
+	source      TEXT REFERENCES nodes(name),
+	destination TEXT REFERENCES nodes(name),
+	description TEXT
+);
+
+CREATE TABLE shortest_paths (
+	id             SERIAL  PRIMARY KEY,
+	source         TEXT REFERENCES nodes(name),
+	destination    TEXT REFERENCES nodes(name),
+	shortest_path  TEXT NOT NULL
+);
+
+-- POC --
+
+1. Node :
+	1. (Create Node with)POST /node/somenode {:description "some-descr"} 
+	2. (Fetch Node with)GET /node/somenode
+	3. (Update node description)PUT /node/somenode  {:description "some-descr"}
+	4. (Delete Node)DELETE /node/somenode 
+2. Edge:
+	1. (Create Edge) POST /edge {:source "somenode" 
+								 :destination "othernode" 
+								 :description "How the relation is made"}
+	2. (Update Edge description) PUT /edge {:source "somenode" 
+										    :destination "othernode" 
+										    :description "Changed description"}
+	3. (DELETE Edge) DELETE /edge {:source      "somenode"
+	                               :destination "othernode"}

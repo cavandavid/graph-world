@@ -34,20 +34,33 @@
 
 (defn query
   "Run an SQL query on the database."
-  [q]
-  (try
-    (j/with-db-connection [conn {:datasource @datasource}]
-      (j/query conn q))
-    (catch java.sql.SQLException ex
-      (println ex))))
+  [condition]
+  (clojure.java.jdbc/with-db-connection [conn {:datasource @datasource}]
+      (clojure.java.jdbc/query conn 
+                               condition)))
+(defn insert!
+  "Inserts record in the database table."
+  [table data]
+  (clojure.java.jdbc/with-db-connection [conn {:datasource @datasource}]
+      (clojure.java.jdbc/insert! conn 
+                                 table 
+                                 data
+                                 {:result-set-fn first})))
 
-(defn execute
-  "Execute query `q` against database."
-  [q]
-  (try
-    (j/with-db-connection [conn {:datasource @datasource}]
-      (j/execute! conn q))
-    (catch java.sql.SQLException ex
-      (println ex))))
+(defn update!
+  "Updates record in the database table"
+  [table data condition]
+  (clojure.java.jdbc/with-db-connection [conn {:datasource @datasource}]
+    (clojure.java.jdbc/update! conn 
+                               table 
+                               data 
+                               condition)))
 
-
+(defn delete!
+  "Updates record in the database table"
+  [table condition]
+  (println "****" table condition)
+  (clojure.java.jdbc/with-db-connection [conn {:datasource @datasource}]
+    (clojure.java.jdbc/delete! conn
+                               table  
+                               condition)))
