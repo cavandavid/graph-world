@@ -1,10 +1,12 @@
 (ns graph-world.database
   (:require [clojure.java.jdbc :as j]
+            [clojure.core.async :as async]
             [hikari-cp.core :refer [make-datasource close-datasource]]))
-
 
 (def datasource (atom nil))
 (def pool (atom nil))
+
+(def write-channel (async/chan))
 
 (def pool
   "Database connection pool."
@@ -36,31 +38,53 @@
   "Run an SQL query on the database."
   [condition]
   (clojure.java.jdbc/with-db-connection [conn {:datasource @datasource}]
-      (clojure.java.jdbc/query conn 
-                               condition)))
+    (clojure.java.jdbc/query conn
+                             condition)))
 (defn insert!
   "Inserts record in the database table."
   [table data]
   (clojure.java.jdbc/with-db-connection [conn {:datasource @datasource}]
-      (clojure.java.jdbc/insert! conn 
-                                 table 
-                                 data
-                                 {:result-set-fn first})))
+    (clojure.java.jdbc/insert! conn
+                               table
+                               data
+                               {:result-set-fn first})))
 
 (defn update!
   "Updates record in the database table"
   [table data condition]
   (clojure.java.jdbc/with-db-connection [conn {:datasource @datasource}]
-    (clojure.java.jdbc/update! conn 
-                               table 
-                               data 
+    (clojure.java.jdbc/update! conn
+                               table
+                               data
                                condition)))
 
 (defn delete!
   "Updates record in the database table"
   [table condition]
-  (println "****" table condition)
   (clojure.java.jdbc/with-db-connection [conn {:datasource @datasource}]
     (clojure.java.jdbc/delete! conn
-                               table  
+                               table
                                condition)))
+;; Even though write requests are made at the same time,
+;; There is only one channel through which they can pass
+;; thus handling multiple writes easily
+(async/go
+  (while true
+    (let [{:keys [operation
+                  table
+                  data
+                  condition
+                  result]
+           :as database-request} (async/<!
+                                  write-channel)]
+      (deliver result
+               (try
+                 [true (case operation
+                         :insert
+                         (insert! table data)
+                         :update
+                         (update! table data condition)
+                         :delete
+                         (delete! table condition))]
+                 (catch java.sql.SQLException ex
+                   [false (.getMessage ex)]))))))

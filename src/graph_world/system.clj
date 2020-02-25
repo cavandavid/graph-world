@@ -11,11 +11,11 @@
   (start [component]
     (println "Initialize database connection pool running on " server-name " and " port-number)
     (assoc component :database-connection (create-connection-pool {:port-number port-number
-                                                         :server-name server-name
-                                                         :database-name database-name
-                                                         :username username
-                                                         :password password})))
-    
+                                                                   :server-name server-name
+                                                                   :database-name database-name
+                                                                   :username username
+                                                                   :password password})))
+
   (stop [component]
     (println "Close database connection pool running on " server-name " and " port-number)
     (close-connection-pool)
@@ -29,11 +29,11 @@
   (start [component]
     (println "Starting web server on port" port)
     (assoc component :web-server (start-web-app port)))
-    
+
   (stop [component]
     (when-let [close (:close (:web-server component))]
-		    (println "Closing down web server" close)
-		    (close)
+      (println "Closing down web server" close)
+      (close)
       (assoc component :web-server nil))))
 
 (defn webserver-component-wrapper [web-server]
@@ -43,5 +43,5 @@
   (let [config-options  (read-config (clojure.java.io/resource "config.edn"))
         {:keys [database web-server]} config-options]
     (component/system-map
-      :db 							(database-component-wrapper database)
-      :server    (webserver-component-wrapper web-server))))
+     :db 							(database-component-wrapper database)
+     :server    (webserver-component-wrapper web-server))))

@@ -5,18 +5,18 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [com.stuartsierra/component "0.4.0"]
-                 [aero "1.1.3"]
+                 ; [aero "1.1.3"]
                  [com.stuartsierra/component.repl "0.2.0"]
                  [org.clojure/java.jdbc "0.7.8"]
                  [hikari-cp "2.6.0"]
                  [prismatic/schema "1.1.10"]
                  [org.postgresql/postgresql "42.2.5"]
-                 [danlentz/clj-uuid "0.1.7"]
+                 [cheshire "5.6.1"]
+                 ; [danlentz/clj-uuid "0.1.7"]
+                 [clj-http "3.9.1"]
                  [yada "1.2.15"]
-                 [com.taoensso/timbre "4.10.0"]
-; [aleph "0.4.1"]
-; [bidi "2.0.12"]
-]
+                 [com.taoensso/timbre "4.10.0"]]
+  :plugins [[lein-cljfmt "0.5.7"]]
   :main ^:skip-aot graph-world.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

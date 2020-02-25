@@ -1,7 +1,8 @@
 (ns graph-world.core
-  (:require 
-    [com.stuartsierra.component.repl :refer [reset set-init start stop]]
-    [graph-world.system :refer [component-system]])
+  (:require
+   [com.stuartsierra.component.repl :refer [reset set-init start stop]]
+   [graph-world.system :refer [component-system]]
+   [graph-world.client])
   (:gen-class))
 
 (defn -main

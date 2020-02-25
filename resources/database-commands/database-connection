@@ -16,7 +16,8 @@ CREATE TABLE edges(
 	id          SERIAL PRIMARY KEY,
 	source      TEXT REFERENCES nodes(name),
 	destination TEXT REFERENCES nodes(name),
-	description TEXT
+	description TEXT,
+	unique (source, destination)
 );
 
 CREATE TABLE shortest_paths (
