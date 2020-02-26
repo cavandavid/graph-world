@@ -3,6 +3,17 @@
 
 (def base-url "http://localhost:11131/")
 
+(defn get-fake-names
+  "Queries http://names.drycodes.com to get fake names"
+  [count]
+  (let [url      (str "http://names.drycodes.com/" count "?nameOptions=boy_names")]
+      (-> (client/get
+                  url
+                  {:insecure?        true
+                   :throw-exceptions true
+                   :as               :json})
+          :body)))
+
 (defn create-node
   "Queries graph api to create node"
   [node-name description]
