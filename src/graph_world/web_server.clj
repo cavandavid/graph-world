@@ -69,7 +69,7 @@
                                 (if result
                                   result
                                   (assoc (:response ctx)
-                                         :status 204))))}
+                                         :status 403))))}
      :post   {:parameters   {:path {:node-name s/Str}
                              :body {:description s/Str}}
               :response (fn [ctx]

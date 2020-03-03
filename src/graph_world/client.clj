@@ -7,12 +7,12 @@
   "Queries http://names.drycodes.com to get fake names"
   [count]
   (let [url      (str "http://names.drycodes.com/" count "?nameOptions=boy_names")]
-      (-> (client/get
-                  url
-                  {:insecure?        true
-                   :throw-exceptions true
-                   :as               :json})
-          :body)))
+    (-> (client/get
+         url
+         {:insecure?        true
+          :throw-exceptions true
+          :as               :json})
+        :body)))
 
 (defn create-node
   "Queries graph api to create node"
@@ -56,7 +56,7 @@
                             :parent   nil})
     (while (not-empty @node-queue)
       (let [{:keys [value parent] :as current-node} (first @node-queue)]
-        ;; Enqueue first item from queue
+        ;; Dequeue first item from queue
         (swap! node-queue pop)
         ;; Add to distance table
         (swap! distance-table assoc value current-node)
@@ -68,7 +68,7 @@
            (map
             (fn [fetched-child]
               (if-not (get @distance-table fetched-child)
-                  ;; Add the children of the node into the queue
+                 ;; Add the children of the node into the queue
                 (swap! node-queue conj {:value  fetched-child
                                         :parent value}))) (get-connections value))))))
     (clojure.string/join " --> " (back-track-table))))
