@@ -40,8 +40,9 @@
   (map->Webserver web-server))
 
 (defn component-system []
-  (let [config-options  (read-config (clojure.java.io/resource "config.edn"))
+  (let [config-options                (read-config
+                                        (clojure.java.io/resource "config.edn"))
         {:keys [database web-server]} config-options]
     (component/system-map
-     :db 							(database-component-wrapper database)
-     :server    (webserver-component-wrapper web-server))))
+     :db 		 (database-component-wrapper database)
+     :server (webserver-component-wrapper web-server))))
