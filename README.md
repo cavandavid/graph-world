@@ -85,7 +85,7 @@ curl  -i  -XPOST -d '{"description": "Clojure guy at obmondo.com"}' -H 'Content-
 `
 
 `
-curl  -i  -XPOST -d '{"description": "CTO at ticketless"}' -H 'Content-Type: application/json' localhost:11131/node/gwenael
+curl  -i  -XPOST -d '{"description": "Fellow Clojurist"}' -H 'Content-Type: application/json' localhost:11131/node/gwenael
 `
 
 `
@@ -111,12 +111,12 @@ curl  -i -XDELETE  -H 'Content-Type: application/json' localhost:11131/node/mark
 
 Create an edge
 `
-curl  -i  -XPOST -d '{"source": "gwenael", "description": "Interviewed with for first round", "destination": "cavan"}' -H 'Content-Type: application/json' localhost:11131/edge
+curl  -i  -XPOST -d '{"source": "gwenael", "description": "First session", "destination": "cavan"}' -H 'Content-Type: application/json' localhost:11131/edge
 `
 
 Modify edge attribute
 `
-curl  -i  -XPUT -d '{"source": "gwenael", "description": "Interviewed with for second round", "destination": "cavan"}' -H 'Content-Type: application/json' localhost:11131/edge
+curl  -i  -XPUT -d '{"source": "gwenael", "description": "Second session", "destination": "cavan"}' -H 'Content-Type: application/json' localhost:11131/edge
 `
 
 Delete edge
