@@ -4,13 +4,8 @@
             [hikari-cp.core :refer [make-datasource close-datasource]]))
 
 (def datasource (atom nil))
-(def pool (atom nil))
 
 (def write-channel (async/chan))
-
-(def pool
-  "Database connection pool."
-  (atom nil))
 
 (def predefined-database-settings
   {:auto-commit       true
@@ -26,7 +21,6 @@
   (let [merged-settings (merge input-settings predefined-database-settings)]
     (do
       (reset! datasource (make-datasource merged-settings))
-      (reset! pool (.getConnection @datasource))
       @datasource)))
 
 (defn close-connection-pool
@@ -65,26 +59,29 @@
     (clojure.java.jdbc/delete! conn
                                table
                                condition)))
-;; Even though write requests are made at the same time,
-;; There is only one channel through which they can pass
-;; thus handling multiple writes easily
-(async/go
-  (while true
-    (let [{:keys [operation
-                  table
-                  data
-                  condition
-                  result]
-           :as database-request} (async/<!
-                                  write-channel)]
-      (deliver result
-               (try
-                 [true (case operation
-                         :insert
-                         (insert! table data)
-                         :update
-                         (update! table data condition)
-                         :delete
-                         (delete! table condition))]
-                 (catch java.sql.SQLException ex
-                   [false (.getMessage ex)]))))))
+
+(defn ensure-integrity-of-database-writes
+  "Even though write requests are made at the same time,
+			There is only one channel through which they can pass
+			thus handling multiple writes easily without worrying about broken states"
+  []
+  (async/go
+    (while true
+      (let [{:keys [operation
+                    table
+                    data
+                    condition
+                    result]
+             :as database-request} (async/<!
+                                    write-channel)]
+        (deliver result
+                 (try
+                   [true (case operation
+                           :insert
+                           (insert! table data)
+                           :update
+                           (update! table data condition)
+                           :delete
+                           (delete! table condition))]
+                   (catch java.sql.SQLException ex
+                     [false (.getMessage ex)])))))))

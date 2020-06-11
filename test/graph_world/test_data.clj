@@ -2,6 +2,7 @@
   (:require [graph-world.client :refer [get-fake-names]]))
 
 (def linkedin-urls-search-users-by-characters
+  "Welcome to our fictional `linked search users by first character` page"
   [{:node "linkedin.com_search_c"  :description "Linkedin search users with c"}
    {:node "linkedin.com_search_j"  :description "Linkedin search users with j"}
    {:node "linkedin.com_search_b"  :description "Linkedin search users with b"}
@@ -30,6 +31,7 @@
    {:node "linkedin.com_search_z"  :description "Linkedin search users with z"}])
 ;; http://names.drycodes.com/100?nameOptions=boy_names
 (def linkedin-profiles-self-populated
+  "Welcome to our fictional linkedin profiles"
   [{:node  "linkedin.com_profile_alex_jose"       :description  "alex_jose's linkedin page"}
    {:node  "linkedin.com_profile_alex_ryan"       :description  "alex_ryan's linkedin page"}
    {:node  "linkedin.com_profile_alexandra_baker" :description  "alexandra_baker's linkedin page"}
@@ -97,7 +99,7 @@
    {:node  "linkedin.com_profile_celeste"       :description "Celeste's linkedin page"}
    {:node  "linkedin.com_profile_connor"        :description "Connor's linkedin page"}
    {:node  "linkedin.com_profile_carol"         :description "Carol's linkedin page"}
-   
+
    {:node  "linkedin.com_profile_daniel"        :description "daniel's linkedin page"}
    {:node  "linkedin.com_profile_declan"        :description "declan's linkedin page"}
    {:node  "linkedin.com_profile_dawson"        :description "dawson's linkedin page"}
@@ -129,10 +131,11 @@
    {:node  "linkedin.com_profile_darren"        :description "darren's linkedin page"}])
 
 (def linkedin-profiles
-  (concat 
-    linkedin-profiles-self-populated
-    (mapv
-      (fn [name]
-        {:node        (str "linkedin.com_profile_" name)
-         :description (str name "'s linkedin page")})
-      (get-fake-names 1000))))
+  "Got tired of manually filling out nodes so used a fake name generator api"
+  (concat
+   linkedin-profiles-self-populated
+   (mapv
+    (fn [name]
+      {:node        (str "linkedin.com_profile_" name)
+       :description (str name "'s linkedin page")})
+    (get-fake-names 1000))))

@@ -4,6 +4,7 @@
             [graph-world.test-data :refer [linkedin-urls-search-users-by-characters
                                            linkedin-profiles]]))
 (defn populate-test-nodes
+  "Test function to create a bunch of test nodes to play around with"
   []
   (do
 				; Populate nodes :

@@ -1,4 +1,4 @@
-# graph-world
+# Graph application where nodes are persistently stored. Also provides http client to calculate shortest path between any two nodes
 
 ## Setup the database
 `
@@ -34,13 +34,19 @@ CREATE TABLE shortest_paths (
 ```
 ## Start web app and create connection pools with database
 
+## Start the repl
+
 `
 lein repl
 `
 
+## Fire up the application
+
 ```clojure
-(graph-world.core/reset)
+graph-world.core=> (reset)
 ```
+
+Congratulations your app is now running!, as you make changes in the code you can simply hit `graph-world.core=> (reset)` and the app will shut down and start up again with your changes!!
 
 ## Populate test data in database
 
