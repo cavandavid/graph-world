@@ -138,4 +138,4 @@
     (fn [name]
       {:node        (str "linkedin.com_profile_" name)
        :description (str name "'s linkedin page")})
-    (get-fake-names 1000))))
+    (get-fake-names 100))))

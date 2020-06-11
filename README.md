@@ -136,7 +136,8 @@ curl  -i  -XDELETE -d '{"source": "gwenael", "destination": "cavan"}' -H 'Conten
 `
 graph-world.client=> (calculate-shortest-path "gwenael" "cavan")
 
-"gwenael --> cavan"
+""
+_Because you just deleted the edge between the two nodes_
 `
 
 `
